@@ -6,6 +6,8 @@ class NodeType(enum.Enum):
     PARAGRAPH = (0, 'paragraph')
     TEXT = (1, 'text')
     HARD_BREAK = (2, 'hardBreak')
+    BULLET_LIST = (3, 'bulletList')
+    LIST_ITEM = (4, 'listItem')
 
     def __str__(self):
         return self.value[1]
@@ -84,6 +86,32 @@ class TextNode(Node):
         return out
 
 
+class BulletListNode(Node):
+    _elements: List
+
+    def __init__(self, node_dict: Dict):
+        super().__init__(node_dict)
+
+        self._elements = list()
+        for child_node in self._child_nodes:
+            # make sure we have only listItem as children of the node
+            if child_node.type != NodeType.LIST_ITEM:
+                print(f"WARNING '{NodeType.LIST_ITEM.value}' expected under bulletList; but '{child_node.type}' "
+                      f"appeared")
+                continue
+
+            self._elements.append(child_node)
+
+    @property
+    def elements(self) -> List:
+        return self._elements
+
+
+class ListItemNode(Node):
+    def __init__(self, node_dict: Dict):
+        super().__init__(node_dict)
+
+
 class HardBreak(Node):
     def __init__(self, node_dict: Dict):
         super().__init__(node_dict)
@@ -100,5 +128,9 @@ def create_node_from_dict(node_dict: Dict) -> Optional[Node]:
         return ParagraphNode(node_dict)
     elif node_type == NodeType.HARD_BREAK:
         return HardBreak(node_dict)
+    elif node_type == NodeType.BULLET_LIST:
+        return BulletListNode(node_dict)
+    elif node_type == NodeType.LIST_ITEM:
+        return ListItemNode(node_dict)
 
     raise NotImplementedError(f"unhandled node type '{node_type}'")

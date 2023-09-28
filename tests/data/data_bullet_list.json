@@ -1,0 +1,38 @@
+{
+    "type": "bulletList",
+    "content":
+    [
+        {
+            "type": "listItem",
+            "content":
+            [
+                {
+                    "type": "paragraph",
+                    "content":
+                    [
+                        {
+                            "type": "text",
+                            "text": "First item"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "listItem",
+            "content":
+            [
+                {
+                    "type": "paragraph",
+                    "content":
+                    [
+                        {
+                            "type": "text",
+                            "text": "Second item"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
