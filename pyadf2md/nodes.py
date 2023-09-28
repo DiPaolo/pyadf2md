@@ -55,9 +55,6 @@ class ParagraphNode(Node):
     def __init__(self, node_dict: Dict):
         super().__init__(node_dict)
 
-    def __str__(self):
-        return '\n\n' + ''.join([str(node) if node else ' ' for node in self.child_nodes])
-
 
 class TextNode(Node):
     _text: str
@@ -72,16 +69,14 @@ class TextNode(Node):
         self._text = node_dict['text']
         self._content = node_dict['marks'] if 'marks' in node_dict else list()
 
-    def __str__(self):
+    @property
+    def text(self) -> str:
         return self._text
 
 
 class HardBreak(Node):
     def __init__(self, node_dict: Dict):
         super().__init__(node_dict)
-
-    def __str__(self):
-        return '\n'
 
 
 def create_node_from_dict(node_dict: Dict) -> Optional[Node]:
