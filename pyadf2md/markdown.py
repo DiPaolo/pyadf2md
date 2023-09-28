@@ -42,7 +42,16 @@ class TextPresenter(NodePresenter):
         # self._text_node = TextNode(self._node)
 
     def __str__(self):
-        return self._node.text
+        out = self._node.text
+
+        marks = self._node.marks
+        for m in marks:
+            if m == 'strong':
+                out = bold(out)
+            elif m == 'em':
+                out = italic(out)
+
+        return out
 
 
 class HardBreakPresenter(NodePresenter):
@@ -61,6 +70,8 @@ def create_node_presenter_from_node(node: Node) -> NodePresenter:
     elif node.type == NodeType.HARD_BREAK:
         return HardBreakPresenter(node)
 
+    raise NotImplementedError(f"markdown presenter: unhandled node type '{node.type}'")
+
 
 def header1(text: str) -> str:
     return f'# {text}'
@@ -75,4 +86,26 @@ def header3(text: str) -> str:
 
 
 def bold(text: str) -> str:
-    return f'**{text}**'
+    return _apply_formatting(text, '**')
+
+
+def italic(text: str) -> str:
+    return _apply_formatting(text, '*')
+
+
+def _apply_formatting(text: str, format_symbols: str) -> str:
+    text, trailing_spaces_count = remove_trailing_spaces(text)
+    return f"{format_symbols}{text}{format_symbols}{' ' * trailing_spaces_count}"
+
+
+def remove_trailing_spaces(text: str) -> (str, int):
+    count = 0
+    for ch in reversed(text):
+        if ch == ' ':
+            count += 1
+        else:
+            break
+
+    # remove trailing spaces and return that string;
+    # str[:0] will clear the string, take it into account by using if ... else
+    return text[:-count] if count > 0 else text, count

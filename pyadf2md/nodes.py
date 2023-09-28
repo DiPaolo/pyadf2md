@@ -67,11 +67,21 @@ class TextNode(Node):
             raise ValueError("text node must contain 'text' attribute")
 
         self._text = node_dict['text']
-        self._content = node_dict['marks'] if 'marks' in node_dict else list()
+        self._marks = node_dict['marks'] if 'marks' in node_dict else list()
 
     @property
     def text(self) -> str:
         return self._text
+
+    @property
+    def marks(self) -> List[str]:
+        out = list()
+        for m in self._marks:
+            if 'type' not in m:
+                raise ValueError(f"marks do not contain 'type' attribute")
+            out.append(m['type'])
+
+        return out
 
 
 class HardBreak(Node):
@@ -91,5 +101,4 @@ def create_node_from_dict(node_dict: Dict) -> Optional[Node]:
     elif node_type == NodeType.HARD_BREAK:
         return HardBreak(node_dict)
 
-    raise ValueError(f"unhandled node type '{node_type}'")
-    # return None
+    raise NotImplementedError(f"unhandled node type '{node_type}'")
