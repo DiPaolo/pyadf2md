@@ -127,11 +127,6 @@ class PanelNode(Node):
         super().__init__(node_dict)
 
 
-class TableHeader(Node):
-    def __init__(self, node_dict: Dict):
-        super().__init__(node_dict)
-
-
 class TableRow(Node):
     def __init__(self, node_dict: Dict):
         super().__init__(node_dict)
@@ -142,7 +137,7 @@ class TableRow(Node):
         for child in self.child_nodes:
             if child.type in [NodeType.TABLE_HEADER, NodeType.TABLE_CELL]:
                 # TODO add support colspan
-                count += 1
+                count += child.colspan
 
         return count
 
@@ -172,6 +167,15 @@ class TableNode(Node):
 
 
 class TableCell(Node):
+    def __init__(self, node_dict: Dict):
+        super().__init__(node_dict)
+
+    @property
+    def colspan(self) -> int:
+        return self._attrs['colspan'] if 'colspan' in self._attrs else 1
+
+
+class TableHeader(TableCell):
     def __init__(self, node_dict: Dict):
         super().__init__(node_dict)
 
