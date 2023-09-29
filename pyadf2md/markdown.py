@@ -128,25 +128,9 @@ class TablePresenter(NodePresenter):
         super().__init__(node)
 
     def __str__(self):
-        out = ''
-
-        header_presenters = list(
-            filter(lambda child: len(list(
-                filter(lambda child_child: child_child.node.type == NodeType.TABLE_HEADER,
-                       child.child_presenters))) > 0,
-                   self._child_presenters)
-        )
-
-        # if len(header_presenters) > 0:
-        #     if len(header_presenters) > 1:
-        #         print(f'WARNING table presenter contains more than one header presenter')
-        #
-        #     header_str = str(header_presenters[0])
-        #     out += header_str
-        #     out += '-' * len(header_str)
-
+        row_list = list()
         for row_presenter in self._child_presenters:
-            out += f'{str(row_presenter)}'
+            row_list.append(f'{str(row_presenter)}')
 
             is_header = len(list(filter(lambda child_child: child_child.node.type == NodeType.TABLE_HEADER,
                                         row_presenter.child_presenters))) > 0
@@ -154,9 +138,9 @@ class TablePresenter(NodePresenter):
                 # insert separator like this:
                 # | --- | --- | --- |
                 col_count = row_presenter.column_count
-                out += f"| {' | '.join(['---'] * col_count)} |\n"
+                row_list.append(f"| {' | '.join(['---'] * col_count)} |")
 
-        return out
+        return '\n'.join(row_list)
 
 
 class TableRowPresenter(NodePresenter):
@@ -164,7 +148,7 @@ class TableRowPresenter(NodePresenter):
         super().__init__(node)
 
     def __str__(self):
-        return f"| {' | '.join([str(child_presenter) for child_presenter in self._child_presenters])} |\n"
+        return f"| {' | '.join([str(child_presenter) for child_presenter in self._child_presenters])} |"
 
     @property
     def column_count(self) -> int:
