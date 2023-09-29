@@ -1,0 +1,92 @@
+[
+  {
+    "type": "paragraph",
+    "content": [
+      {
+        "type": "text",
+        "text": "Start the line with "
+      },
+      {
+        "type": "text",
+        "text": "important",
+        "marks": [
+          {
+            "type": "strong"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "text": " notice"
+      },
+      {
+        "type": "hardBreak"
+      },
+      {
+        "type": "text",
+        "text": "And the second line continues"
+      },
+      {
+        "type": "hardBreak"
+      },
+      {
+        "type": "text",
+        "text": "Third line is bold",
+        "marks": [
+          {
+            "type": "strong"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "text": " and some normal text again"
+      }
+    ]
+  },
+  {
+    "type": "paragraph",
+    "content": [
+      {
+        "type": "text",
+        "text": "The next paragraph starts here with"
+      },
+      {
+        "type": "text",
+        "text": "the same following text",
+        "marks": [
+          {
+            "type": "strong"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "text": "notice"
+      },
+      {
+        "type": "hardBreak"
+      },
+      {
+        "type": "text",
+        "text": "And the second line continues"
+      },
+      {
+        "type": "hardBreak"
+      },
+      {
+        "type": "text",
+        "text": "Third line is bold",
+        "marks": [
+          {
+            "type": "strong"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "text": " and some normal text again"
+      }
+    ]
+  }
+]

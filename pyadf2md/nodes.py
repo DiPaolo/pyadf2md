@@ -8,6 +8,7 @@ class NodeType(enum.Enum):
     HARD_BREAK = (2, 'hardBreak')
     BULLET_LIST = (3, 'bulletList')
     LIST_ITEM = (4, 'listItem')
+    PANEL = (5, 'panel')
 
     def __str__(self):
         return self.value[1]
@@ -112,7 +113,12 @@ class ListItemNode(Node):
         super().__init__(node_dict)
 
 
-class HardBreak(Node):
+class HardBreakNode(Node):
+    def __init__(self, node_dict: Dict):
+        super().__init__(node_dict)
+
+
+class PanelNode(Node):
     def __init__(self, node_dict: Dict):
         super().__init__(node_dict)
 
@@ -127,10 +133,28 @@ def create_node_from_dict(node_dict: Dict) -> Optional[Node]:
     elif node_type == NodeType.PARAGRAPH:
         return ParagraphNode(node_dict)
     elif node_type == NodeType.HARD_BREAK:
-        return HardBreak(node_dict)
+        return HardBreakNode(node_dict)
     elif node_type == NodeType.BULLET_LIST:
         return BulletListNode(node_dict)
     elif node_type == NodeType.LIST_ITEM:
         return ListItemNode(node_dict)
+    elif node_type == NodeType.PANEL:
+        return PanelNode(node_dict)
 
     raise NotImplementedError(f"unhandled node type '{node_type}'")
+
+
+def create_nodes_from_list(node_dict_list: List[Dict]) -> List[Node]:
+    out = list()
+
+    idx = 0
+    for node_dict in node_dict_list:
+        new_node = create_node_from_dict(node_dict)
+        if not new_node:
+            print(f'WARNING failed to create node from dict (list_index={idx})')
+        else:
+            out.append(new_node)
+
+        idx += 1
+
+    return out

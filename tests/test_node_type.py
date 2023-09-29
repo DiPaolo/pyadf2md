@@ -6,5 +6,5 @@ def test_enum():
 
     # do not use len() intentionally to know how much items do we
     # support + double check when manually update the value
-    assert len(supported_values) == 5
-    assert supported_values == ['paragraph', 'text', 'hardBreak', 'bulletList', 'listItem']
+    assert len(supported_values) == 6
+    assert supported_values == ['paragraph', 'text', 'hardBreak', 'bulletList', 'listItem', 'panel']
