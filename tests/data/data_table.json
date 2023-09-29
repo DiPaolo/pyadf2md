@@ -1,0 +1,118 @@
+{
+  "type": "table",
+  "attrs": {
+    "isNumberColumnEnabled": false,
+    "layout": "default"
+  },
+  "content": [
+    {
+      "type": "tableRow",
+      "content": [
+        {
+          "type": "tableHeader",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Syntax",
+                  "marks": [
+                    {
+                      "type": "strong"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tableHeader",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Description",
+                  "marks": [
+                    {
+                      "type": "strong"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "tableRow",
+      "content": [
+        {
+          "type": "tableCell",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Header"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tableCell",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Title"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "tableRow",
+      "content": [
+        {
+          "type": "tableCell",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Paragraph"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tableCell",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Text"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

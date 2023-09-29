@@ -34,6 +34,17 @@ class NodePresenter(object):
             idx += 1
             cur_node_type = child.type
 
+    def __str__(self):
+        return ''.join([str(child_presenter) for child_presenter in self._child_presenters])
+
+    @property
+    def node(self) -> Node:
+        return self._node
+
+    @property
+    def child_presenters(self) -> List:
+        return self._child_presenters
+
 
 class ParagraphPresenter(NodePresenter):
     _no_leading_newlines: bool
@@ -97,9 +108,6 @@ class ListItemPresenter(NodePresenter):
     def __init__(self, node: Node):
         super().__init__(node)
 
-    def __str__(self):
-        return ''.join([str(child_presenter) for child_presenter in self._child_presenters])
-
 
 class PanelPresenter(NodePresenter):
     def __init__(self, node: Node, no_leading_newlines=False):
@@ -113,6 +121,64 @@ class PanelPresenter(NodePresenter):
                 out_lines.append(f'> {line}')
 
         return '\n'.join(out_lines)
+
+
+class TablePresenter(NodePresenter):
+    def __init__(self, node: Node):
+        super().__init__(node)
+
+    def __str__(self):
+        out = ''
+
+        header_presenters = list(
+            filter(lambda child: len(list(
+                filter(lambda child_child: child_child.node.type == NodeType.TABLE_HEADER,
+                       child.child_presenters))) > 0,
+                   self._child_presenters)
+        )
+
+        # if len(header_presenters) > 0:
+        #     if len(header_presenters) > 1:
+        #         print(f'WARNING table presenter contains more than one header presenter')
+        #
+        #     header_str = str(header_presenters[0])
+        #     out += header_str
+        #     out += '-' * len(header_str)
+
+        for row_presenter in self._child_presenters:
+            out += f'{str(row_presenter)}'
+
+            is_header = len(list(filter(lambda child_child: child_child.node.type == NodeType.TABLE_HEADER,
+                                        row_presenter.child_presenters))) > 0
+            if is_header:
+                # insert separator like this:
+                # | --- | --- | --- |
+                col_count = row_presenter.column_count
+                out += f"| {' | '.join(['---'] * col_count)} |\n"
+
+        return out
+
+
+class TableRowPresenter(NodePresenter):
+    def __init__(self, node: Node):
+        super().__init__(node)
+
+    def __str__(self):
+        return f"| {' | '.join([str(child_presenter) for child_presenter in self._child_presenters])} |\n"
+
+    @property
+    def column_count(self) -> int:
+        return self.node.column_count
+
+
+class TableHeaderPresenter(NodePresenter):
+    def __init__(self, node: Node):
+        super().__init__(node)
+
+
+class TableCellPresenter(NodePresenter):
+    def __init__(self, node: Node):
+        super().__init__(node)
 
 
 # TODO bad idea with so many flags; needs to be improved
@@ -132,6 +198,14 @@ def create_node_presenter_from_node(node: Node, is_first: bool, is_prev_hard_bre
         return ListItemPresenter(node)
     elif node.type == NodeType.PANEL:
         return PanelPresenter(node)
+    elif node.type == NodeType.TABLE:
+        return TablePresenter(node)
+    elif node.type == NodeType.TABLE_ROW:
+        return TableRowPresenter(node)
+    elif node.type == NodeType.TABLE_HEADER:
+        return TableHeaderPresenter(node)
+    elif node.type == NodeType.TABLE_CELL:
+        return TableCellPresenter(node)
 
     raise NotImplementedError(f"markdown presenter: unhandled node type '{node.type}'")
 

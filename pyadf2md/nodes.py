@@ -9,6 +9,10 @@ class NodeType(enum.Enum):
     BULLET_LIST = (3, 'bulletList')
     LIST_ITEM = (4, 'listItem')
     PANEL = (5, 'panel')
+    TABLE = (6, 'table')
+    TABLE_ROW = (7, 'tableRow')
+    TABLE_HEADER = (8, 'tableHeader')
+    TABLE_CELL = (9, 'tableCell')
 
     def __str__(self):
         return self.value[1]
@@ -123,11 +127,64 @@ class PanelNode(Node):
         super().__init__(node_dict)
 
 
+class TableHeader(Node):
+    def __init__(self, node_dict: Dict):
+        super().__init__(node_dict)
+
+
+class TableRow(Node):
+    def __init__(self, node_dict: Dict):
+        super().__init__(node_dict)
+
+    @property
+    def column_count(self) -> int:
+        count = 0
+        for child in self.child_nodes:
+            if child.type in [NodeType.TABLE_HEADER, NodeType.TABLE_CELL]:
+                # TODO add support colspan
+                count += 1
+
+        return count
+
+
+class TableNode(Node):
+    def __init__(self, node_dict: Dict):
+        super().__init__(node_dict)
+
+    @property
+    def header(self) -> Optional[TableRow]:
+        headers = list(filter(
+            lambda node: node.type == NodeType.TABLE_ROW and
+                         len(list(filter(
+                             lambda child: child.type == NodeType.TABLE_HEADER,
+                             node.child_nodes
+                         ))) > 0,
+            self.child_nodes)
+        )
+
+        if len(headers) == 0:
+            return None
+
+        if len(headers) > 0:
+            print(f'WARNING table contains more than one header')
+
+        return headers[0]
+
+
+class TableCell(Node):
+    def __init__(self, node_dict: Dict):
+        super().__init__(node_dict)
+
+
 def create_node_from_dict(node_dict: Dict) -> Optional[Node]:
     if 'type' not in node_dict:
         return None
 
-    node_type = NodeType.from_string(node_dict['type'])
+    try:
+        node_type = NodeType.from_string(node_dict['type'])
+    except ValueError as ex:
+        raise NotImplementedError(f"unhandled node type '{node_dict['type']}'")
+
     if node_type == NodeType.TEXT:
         return TextNode(node_dict)
     elif node_type == NodeType.PARAGRAPH:
@@ -140,8 +197,16 @@ def create_node_from_dict(node_dict: Dict) -> Optional[Node]:
         return ListItemNode(node_dict)
     elif node_type == NodeType.PANEL:
         return PanelNode(node_dict)
+    elif node_type == NodeType.TABLE:
+        return TableNode(node_dict)
+    elif node_type == NodeType.TABLE_ROW:
+        return TableRow(node_dict)
+    elif node_type == NodeType.TABLE_HEADER:
+        return TableHeader(node_dict)
+    elif node_type == NodeType.TABLE_CELL:
+        return TableCell(node_dict)
 
-    raise NotImplementedError(f"unhandled node type '{node_type}'")
+    raise RuntimeError(f"unhandled node type '{node_type}'")
 
 
 def create_nodes_from_list(node_dict_list: List[Dict]) -> List[Node]:
