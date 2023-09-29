@@ -1,0 +1,38 @@
+[
+  {
+    "type": "text",
+    "text": "link",
+    "marks": [
+      {
+        "type": "link",
+        "attrs": {
+          "href": "https://example.com/"
+        }
+      }
+    ]
+  },
+  {
+    "type": "text",
+    "text": "http_link",
+    "marks": [
+      {
+        "type": "link",
+        "attrs": {
+          "href": "http://example.com/"
+        }
+      }
+    ]
+  },
+  {
+    "type": "text",
+    "text": "link name with spaces",
+    "marks": [
+      {
+        "type": "link",
+        "attrs": {
+          "href": "https://example.com/"
+        }
+      }
+    ]
+  }
+]

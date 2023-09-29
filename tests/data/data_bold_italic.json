@@ -1,0 +1,66 @@
+[
+  {
+    "type": "text",
+    "text": "No formatting"
+  },
+  {
+    "type": "text",
+    "text": "Italic",
+    "marks": [
+      {
+        "type": "em"
+      }
+    ]
+  },
+  {
+    "type": "text",
+    "text": "Italic three words",
+    "marks": [
+      {
+        "type": "em"
+      }
+    ]
+  },
+  {
+    "type": "text",
+    "text": "Bold",
+    "marks": [
+      {
+        "type": "strong"
+      }
+    ]
+  },
+  {
+    "type": "text",
+    "text": "Bold three words",
+    "marks": [
+      {
+        "type": "strong"
+      }
+    ]
+  },
+  {
+    "type": "text",
+    "text": "BoldItalic",
+    "marks": [
+      {
+        "type": "em"
+      },
+      {
+        "type": "strong"
+      }
+    ]
+  },
+  {
+    "type": "text",
+    "text": "Bold + Italic",
+    "marks": [
+      {
+        "type": "em"
+      },
+      {
+        "type": "strong"
+      }
+    ]
+  }
+]

@@ -74,12 +74,14 @@ class TextPresenter(NodePresenter):
     def __str__(self):
         out = self._node.text
 
-        marks = self._node.marks
-        for m in marks:
-            if m == 'strong':
-                out = bold(out)
-            elif m == 'em':
-                out = italic(out)
+        if self.node.is_bold:
+            out = bold(out)
+
+        if self.node.is_italic:
+            out = italic(out)
+
+        if self.node.link:
+            out = link(out, self.node.link)
 
         return out
 
@@ -212,6 +214,10 @@ def bold(text: str) -> str:
 
 def italic(text: str) -> str:
     return _apply_formatting(text, '*')
+
+
+def link(text: str, url: str) -> str:
+    return f'[{text}]({url})'
 
 
 def _apply_formatting(text: str, format_symbols: str) -> str:

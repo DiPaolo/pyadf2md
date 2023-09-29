@@ -65,7 +65,10 @@ class ParagraphNode(Node):
 
 class TextNode(Node):
     _text: str
-    _marks: List
+    _marks: List[Dict]
+    _link: Optional[str] = None
+    _is_bold: bool = False
+    _is_italic: bool = False
 
     def __init__(self, node_dict: Dict):
         super().__init__(node_dict)
@@ -76,19 +79,45 @@ class TextNode(Node):
         self._text = node_dict['text']
         self._marks = node_dict['marks'] if 'marks' in node_dict else list()
 
+        for mark in self._marks:
+            if 'type' not in mark:
+                print(f"WARNING mark does not contain 'type' attribute")
+                continue
+
+            mark_type = mark['type']
+
+            if mark_type == 'strong':
+                self._is_bold = True
+
+            if mark_type == 'em':
+                self._is_italic = True
+
+            if mark_type == 'link':
+                if 'attrs' not in mark:
+                    print("ERROR link node does not contain 'attrs' attribute")
+                    continue
+
+                if 'href' not in mark['attrs']:
+                    print("ERROR link's attrs node does not contain 'href' attribute")
+                    continue
+
+                self._link = mark['attrs']['href']
+
     @property
     def text(self) -> str:
         return self._text
 
     @property
-    def marks(self) -> List[str]:
-        out = list()
-        for m in self._marks:
-            if 'type' not in m:
-                raise ValueError(f"marks do not contain 'type' attribute")
-            out.append(m['type'])
+    def link(self) -> Optional[str]:
+        return self._link
 
-        return out
+    @property
+    def is_bold(self) -> bool:
+        return self._is_bold
+
+    @property
+    def is_italic(self) -> bool:
+        return self._is_italic
 
 
 class BulletListNode(Node):
@@ -176,6 +205,7 @@ class TableCell(Node):
 
 
 class TableHeader(TableCell):
+
     def __init__(self, node_dict: Dict):
         super().__init__(node_dict)
 
